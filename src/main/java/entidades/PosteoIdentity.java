@@ -9,7 +9,7 @@ public class PosteoIdentity implements Serializable {
     @NotNull
     private String palabra;
     @NotNull
-    private int idLibro;
+    private int idDocumento;
 
     public String getPalabra() {
         return this.palabra;
@@ -19,17 +19,17 @@ public class PosteoIdentity implements Serializable {
         this.palabra = palabra;
     }
 
-    public int getIdLibro() {
-        return this.idLibro;
+    public int getIdDocumento() {
+        return this.idDocumento;
     }
 
-    public void setIdLibro(int idLibro) {
-        this.idLibro = idLibro;
+    public void setIdDocumento(int idDocumento) {
+        this.idDocumento = idDocumento;
     }
 
-    public PosteoIdentity(String palabra, int idLibro) {
+    public PosteoIdentity(String palabra, int idDocumento) {
         this.palabra = palabra;
-        this.idLibro = idLibro;
+        this.idDocumento = idDocumento;
     }
 
     public boolean equals(Object o) {
