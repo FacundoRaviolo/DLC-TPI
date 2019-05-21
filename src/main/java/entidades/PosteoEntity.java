@@ -34,6 +34,9 @@ public class PosteoEntity {
         this.posteoIdentity = new PosteoIdentity(palabra, idDocumento);
     }
 
+    public PosteoEntity() {
+    }
+
     public PosteoIdentity getPosteoIdentity() {
         return this.posteoIdentity;
     }

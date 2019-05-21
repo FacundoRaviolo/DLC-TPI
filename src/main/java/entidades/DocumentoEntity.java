@@ -1,28 +1,65 @@
 package entidades;
 
-@javax.persistence.Entity
-@javax.persistence.Table(name = "Documento")
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name="Documento")
 public class DocumentoEntity {
-    @javax.persistence.Id
-    @javax.persistence.GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idDocumento;
-    @javax.persistence.Column
-    private java.lang.String titulo;
-    @javax.persistence.OneToMany(mappedBy = "documento")
-    private java.util.List<entidades.PosteoEntity> posteos;
 
-    public java.util.List<entidades.PosteoEntity> getPosteos() { /* compiled code */ }
+    @Column
+    private String titulo;
 
-    public DocumentoEntity() { /* compiled code */ }
+    @Column
+    private String url;
 
-        public int getIdDocumento() { /* compiled code */ }
+    @OneToMany(mappedBy = "documento")
+    private List<PosteoEntity> posteos;
 
-    public void setIdDocumento(int idDocumento) { /* compiled code */ }
+    public List<PosteoEntity> getPosteos(){
+        return posteos;
+    }
 
-    public java.lang.String getTitulo() { /* compiled code */ }
 
-    public void setTitulo(java.lang.String titulo) { /* compiled code */ }
+    public DocumentoEntity() {
+    }
 
-    public java.lang.String toString() { /* compiled code */ }
+
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public int getIdDocumento() {
+        return idDocumento;
+    }
+
+    public void setIdDocumento(int idDocumento) {
+        this.idDocumento = idDocumento;
+    }
+
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    @Override
+    public String toString() {
+        return "DocumentoEntity{" +
+                "id=" + idDocumento +
+                ", titulo='" + titulo + '\'' +
+                ", url='" + url + '\'' +
+                '}';
+    }
 }
-// PRUEBA
