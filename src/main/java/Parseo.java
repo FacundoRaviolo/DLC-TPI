@@ -17,6 +17,7 @@ public class Parseo {
         System.out.println(listaPosteo);
         System.out.println(listaPosteo.size());
         System.out.println(listaPosteo.get("cary"));
+        System.out.println(listaPosteo.get("cary"));
     }
 
 }
