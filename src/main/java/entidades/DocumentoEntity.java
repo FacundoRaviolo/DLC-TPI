@@ -1,11 +1,15 @@
 package entidades;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name="Documento")
-public class DocumentoEntity {
+public class DocumentoEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idDocumento;
@@ -17,20 +21,10 @@ public class DocumentoEntity {
     private String url;
 
     @OneToMany(mappedBy = "documento")
-    private List<PosteoEntity> posteos;
-
-    public List<PosteoEntity> getPosteos(){
-        return posteos;
-    }
+    private List<PosteoEntity> posteo = new ArrayList<>();
 
     public DocumentoEntity() {
     }
-
-    /*public DocumentoEntity(String titulo, String url) {
-        super();
-        this.titulo = titulo;
-        this.url = url;
-    }*/
 
     public String getUrl() {
         return url;
@@ -56,6 +50,19 @@ public class DocumentoEntity {
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DocumentoEntity documento = (DocumentoEntity) o;
+        return Objects.equals(idDocumento, documento.idDocumento);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idDocumento);
     }
 
     @Override

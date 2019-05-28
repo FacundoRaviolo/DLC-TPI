@@ -1,60 +1,65 @@
 package entidades;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.*;
 
 @Entity
-@Table(
-        name = "Posteo"
-)
+@Table(name = "Posteo")
+@IdClass(PosteoID.class)
 public class PosteoEntity {
-    @EmbeddedId
-    PosteoIdentity posteoIdentity;
-    @Column
-    private int vecesEnDoc;
-    @ManyToOne
-    @MapsId("palabra")
-    @JoinColumn(
-            name = "palabra"
-    )
-    VocabularioEntity vocabulario;
-    @ManyToOne
-    @MapsId("idDocumento")
-    @JoinColumn(
-            name = "idDocumento"
-    )
-    DocumentoEntity documento;
 
-    public PosteoEntity(String palabra, int idDocumento) {
-        this.posteoIdentity = new PosteoIdentity(palabra, idDocumento);
-    }
+    @Id
+    private String palabra;
+
+    @Id
+    private int idDocumento;
+
+    private int vecesEnDoc;
+
+    @ManyToOne
+    @JoinColumn(name = "palabra", referencedColumnName = "palabra", insertable = false, updatable = false)
+    private VocabularioEntity vocabulario;
+
+    @ManyToOne
+    @JoinColumn(name = "idDocumento", referencedColumnName = "idDocumento", insertable = false, updatable = false)
+    private DocumentoEntity documento;
 
     public PosteoEntity() {
+
     }
 
-    public PosteoIdentity getPosteoIdentity() {
-        return this.posteoIdentity;
+    public PosteoEntity(String palabra, int idDocumento, int vecesEnDoc) {
+        this.palabra = palabra;
+        this.idDocumento = idDocumento;
+        this.vecesEnDoc = vecesEnDoc;
     }
 
-    public void setPosteoIdentity(PosteoIdentity posteoIdentity) {
-        this.posteoIdentity = posteoIdentity;
+    public String getPalabra() {
+        return palabra;
+    }
+
+    public void setPalabra(String palabra) {
+        this.palabra = palabra;
+    }
+
+    public int getIdDocumento() {
+        return idDocumento;
+    }
+
+    public void setIdDocumento(int idDocumento) {
+        this.idDocumento = idDocumento;
     }
 
     public int getVecesEnDoc() {
-        return this.vecesEnDoc;
+        return vecesEnDoc;
     }
 
     public void setVecesEnDoc(int vecesEnDoc) {
         this.vecesEnDoc = vecesEnDoc;
     }
 
-    public String getPalabra() {
-        return this.posteoIdentity.getPalabra();
+    public VocabularioEntity getVocabulario() {
+        return vocabulario;
     }
 
     public void setVocabulario(VocabularioEntity vocabulario) {
@@ -62,10 +67,34 @@ public class PosteoEntity {
     }
 
     public DocumentoEntity getDocumento() {
-        return this.documento;
+        return documento;
     }
 
-    public void setLibro(DocumentoEntity documento) {
+    public void setDocumento(DocumentoEntity documento) {
         this.documento = documento;
     }
+
+    @Override
+    public String toString() {
+        return "Posteo [palabra=" + palabra + ", documento=" + idDocumento + ", veces=" + vecesEnDoc
+                + "]";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        PosteoEntity that = (PosteoEntity) o;
+        return Objects.equals(vocabulario, that.vocabulario) &&
+                Objects.equals(documento, that.documento);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(vocabulario, documento);
+    }
+
 }

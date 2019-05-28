@@ -1,33 +1,27 @@
 package entidades;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import java.util.Objects;
+import java.util.Set;
+import javax.persistence.*;
 
 @Entity
-@Table(
-        name = "Vocabulario"
-)
-public class VocabularioEntity {
+@Table(name = "Vocabulario")
+public class VocabularioEntity implements Serializable {
     @Id
     private String palabra;
     @Column
     private int cantDoc;
-    @OneToMany(
-            mappedBy = "vocabulario"
-    )
-    private List<PosteoEntity> posteos;
     @Column
     private int maxVecesEnDoc;
 
-    public VocabularioEntity() {
-    }
+    @OneToMany(mappedBy = "vocabulario")
+    private List<PosteoEntity> posteo = new ArrayList<>();
 
-    public List<PosteoEntity> getPosteos() {
-        return this.posteos;
+
+    public VocabularioEntity() {
     }
 
     public String getPalabra() {
@@ -52,6 +46,22 @@ public class VocabularioEntity {
 
     public void setMaxVecesEnDoc(int maxVecesEnDoc) {
         this.maxVecesEnDoc = maxVecesEnDoc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        VocabularioEntity post = (VocabularioEntity) o;
+        return Objects.equals(palabra, post.palabra);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(palabra);
     }
 
     public String toString() {
