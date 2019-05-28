@@ -10,20 +10,19 @@ public class PruebasBD {
         EntityManager em = emf.createEntityManager();
 
         VocabularioEntity vocabulario = new VocabularioEntity();
-        vocabulario.setPalabra("Hola");
+        vocabulario.setPalabra("RosadoLoL5o");
         vocabulario.setCantDoc(5);
-        vocabulario.setMaxVecesEnDoc(100);
+        vocabulario.setMaxVecesEnDoc(150);
 
         DocumentoEntity documento = new DocumentoEntity();
-        documento.setIdDocumento(5);
-        documento.setTitulo("Harry Potter");
-        documento.setUrl("link");
+        documento.setTitulo("Harry Potter 3");
+        documento.setUrl("linkazo");
 
-        PosteoEntity posteo = new PosteoEntity("Hola",5);
+        PosteoEntity posteo = new PosteoEntity("Hola",1);
 
         em.getTransaction().begin();
-        em.persist(vocabulario);
-        em.persist(documento);
+        //em.persist(vocabulario);
+        //em.persist(documento);
         em.persist(posteo);
         em.getTransaction().commit();
 

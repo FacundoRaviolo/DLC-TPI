@@ -42,8 +42,8 @@ public class VocabularioEntity {
         return this.cantDoc;
     }
 
-    public void setCantDoc(int nr) {
-        this.cantDoc = this.cantDoc;
+    public void setCantDoc(int cantDoc) {
+        this.cantDoc = cantDoc;
     }
 
     public int getMaxVecesEnDoc() {

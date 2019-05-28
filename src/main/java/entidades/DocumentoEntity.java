@@ -23,11 +23,14 @@ public class DocumentoEntity {
         return posteos;
     }
 
-
     public DocumentoEntity() {
     }
 
-
+    /*public DocumentoEntity(String titulo, String url) {
+        super();
+        this.titulo = titulo;
+        this.url = url;
+    }*/
 
     public String getUrl() {
         return url;
@@ -40,6 +43,7 @@ public class DocumentoEntity {
     public int getIdDocumento() {
         return idDocumento;
     }
+
 
     public void setIdDocumento(int idDocumento) {
         this.idDocumento = idDocumento;
