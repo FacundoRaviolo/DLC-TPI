@@ -11,9 +11,10 @@ public class LectorPalabras {
     {
         try
         {
-            Scanner sc = new Scanner(f);
-            sc.useDelimiter("[- \n\r/_,¡!@¿?.:«»;*\"º\\[\\]()=°ª%$#0123456789`}]+");
-            String words ="";
+            Scanner sc = new Scanner(f,"ISO-8859-1");
+            //sc.useDelimiter("[- \n\r/_,¡!@¿?.:«»;*\"º\\[\\]()=°ª%$#0123456789`}]+");
+            sc.useDelimiter("[^\\p{IsAlphabetic}']+");
+            String words;
 
             while (sc.hasNext())
             {

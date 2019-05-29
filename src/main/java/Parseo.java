@@ -35,7 +35,8 @@ public class Parseo {
                 tablaHash.put(palabra,vocabulario);
             }
         }
-        System.out.println(tablaHash.toString());
-        System.out.println(tablaHash.get("come"));
+        //System.out.println(tablaHash.toString());
+        System.out.println(tablaHash.get("inferno"));
+        System.out.println(listaPosteo.size());
     }
 }

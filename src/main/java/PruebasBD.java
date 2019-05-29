@@ -11,11 +11,11 @@ public class PruebasBD {
         Hashtable<String,VocabularioEntity> tablaHash = new Hashtable<String, VocabularioEntity>();
 
         Parseo parseo = new Parseo();
-        File file1 = new File("DocumentosTP/1cahe10.txt");
+        File file1 = new File("DocumentosTP/0ddc809a.txt");
         parseo.parseador(file1,tablaHash);
 
-        File file2 = new File("DocumentosTP/ttnic10.txt");
-        parseo.parseador(file2,tablaHash);
+        //File file2 = new File("DocumentosTP/ttnic10.txt");
+        //parseo.parseador(file2,tablaHash);
 
         /*
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("DocumentosPU");
