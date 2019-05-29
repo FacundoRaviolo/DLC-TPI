@@ -8,7 +8,7 @@ public class PruebasBD {
 
     public static void main(String[] args) {
 
-        Hashtable<String,VocabularioEntity> tablaHash = new Hashtable<String, VocabularioEntity>();
+        Hashtable<String,VocabularioEntity> tablaHash = new Hashtable<>();
 
         Parseo parseo = new Parseo();
         File file1 = new File("DocumentosTP/0ddc809a.txt");
