@@ -5,6 +5,24 @@ import java.util.*;
 
 public class Parseo {
 
+
+    public void ObtenerDatosDocumento (File carpeta,Hashtable<String,VocabularioEntity> tablaHash) {
+        for (final File ficheroEntrada : carpeta.listFiles()) {
+            if (ficheroEntrada.isDirectory()) {
+                ObtenerDatosDocumento(ficheroEntrada,tablaHash);
+            } else {
+                String nomDoc = (ficheroEntrada.getName());
+                String url = carpeta + "/" + nomDoc;
+                parseador(ficheroEntrada,tablaHash);
+            }
+
+        }
+    }
+
+
+
+
+
     public void parseador(File file,Hashtable<String,VocabularioEntity> tablaHash)
     {
         //Hashtable<String,VocabularioEntity> tablaHash = new Hashtable<String, VocabularioEntity>();
@@ -35,8 +53,5 @@ public class Parseo {
                 tablaHash.put(palabra,vocabulario);
             }
         }
-        //System.out.println(tablaHash.toString());
-        System.out.println(tablaHash.get("inferno"));
-        System.out.println(listaPosteo.size());
     }
 }
