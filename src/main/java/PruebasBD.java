@@ -1,8 +1,21 @@
+import entidades.VocabularioEntity;
+
+import java.io.File;
+import java.util.Hashtable;
+
 public class PruebasBD {
+
+
     public static void main(String[] args) {
 
+        Hashtable<String,VocabularioEntity> tablaHash = new Hashtable<String, VocabularioEntity>();
+
         Parseo parseo = new Parseo();
-        parseo.parseador();
+        File file1 = new File("DocumentosTP/1cahe10.txt");
+        parseo.parseador(file1,tablaHash);
+
+        File file2 = new File("DocumentosTP/ttnic10.txt");
+        parseo.parseador(file2,tablaHash);
 
         /*
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("DocumentosPU");

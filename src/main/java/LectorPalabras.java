@@ -12,7 +12,7 @@ public class LectorPalabras {
         try
         {
             Scanner sc = new Scanner(f);
-            sc.useDelimiter("[- \n\r/_,¡!@¿?.:«»;*\"º\\[\\]()=°ª%$#0123456789]+");
+            sc.useDelimiter("[- \n\r/_,¡!@¿?.:«»;*\"º\\[\\]()=°ª%$#0123456789`}]+");
             String words ="";
 
             while (sc.hasNext())

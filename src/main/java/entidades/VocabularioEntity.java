@@ -20,6 +20,12 @@ public class VocabularioEntity implements Serializable {
     private List<PosteoEntity> posteo = new ArrayList<>();
 
 
+    public VocabularioEntity(String palabra, int cantDoc, int maxVecesEnDoc) {
+        this.palabra = palabra;
+        this.cantDoc = cantDoc;
+        this.maxVecesEnDoc = maxVecesEnDoc;
+    }
+
     public VocabularioEntity() {
     }
 

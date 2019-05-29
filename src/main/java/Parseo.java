@@ -1,23 +1,41 @@
+import entidades.VocabularioEntity;
+
 import java.io.*;
 import java.util.*;
 
 public class Parseo {
 
-    /*private void armadorHT() {
-        Hashtable<String, VocabularioEntity> tablaNueva=new Hashtable<String, VocabularioEntity>();
-    }*/
-
-    public void parseador()
+    public void parseador(File file,Hashtable<String,VocabularioEntity> tablaHash)
     {
-        File file = new File("0ddcc10.txt");
+        //Hashtable<String,VocabularioEntity> tablaHash = new Hashtable<String, VocabularioEntity>();
 
         HashMap<String,Integer> listaPosteo = new HashMap<String,Integer>();
         LectorPalabras lector = new LectorPalabras();
         lector.readFile(file,listaPosteo);
-        System.out.println(listaPosteo);
-        System.out.println(listaPosteo.size());
-        System.out.println(listaPosteo.get("cary"));
-        System.out.println(listaPosteo.get("cary"));
-    }
 
+        Iterator iterator = listaPosteo.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry posteo = (Map.Entry) iterator.next();
+            String palabra = (String)posteo.getKey();
+            int cantVeces = (int)posteo.getValue();
+
+            if (tablaHash.containsKey(palabra)){
+                VocabularioEntity voc = tablaHash.get(palabra);
+                if (cantVeces > voc.getMaxVecesEnDoc()){
+                    VocabularioEntity vocabulario = new VocabularioEntity(palabra,voc.getCantDoc() + 1,cantVeces);
+                    tablaHash.put(palabra,vocabulario);
+                }
+                else{
+                    VocabularioEntity vocabulario = new VocabularioEntity(palabra,voc.getCantDoc() + 1,voc.getMaxVecesEnDoc());
+                    tablaHash.put(palabra,vocabulario);
+                }
+            }
+            else{
+                VocabularioEntity vocabulario = new VocabularioEntity(palabra,1,cantVeces);
+                tablaHash.put(palabra,vocabulario);
+            }
+        }
+        System.out.println(tablaHash.toString());
+        System.out.println(tablaHash.get("come"));
+    }
 }
