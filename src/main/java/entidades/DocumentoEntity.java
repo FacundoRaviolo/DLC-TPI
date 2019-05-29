@@ -10,7 +10,6 @@ import java.util.Objects;
 @Table(name="Documento")
 public class DocumentoEntity implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idDocumento;
 
     @Column
@@ -49,6 +48,12 @@ public class DocumentoEntity implements Serializable {
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
+    }
+
+    public DocumentoEntity(int idDocumento,String titulo, String url) {
+        this.idDocumento = idDocumento;
+        this.titulo = titulo;
+        this.url = url;
     }
 
     @Override

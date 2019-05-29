@@ -1,33 +1,49 @@
+import entidades.DocumentoEntity;
 import entidades.VocabularioEntity;
-
+import javax.persistence.*;
 import java.io.*;
 import java.util.*;
 
 public class Parseo {
 
 
-    public void ObtenerDatosDocumento (File carpeta,Hashtable<String,VocabularioEntity> tablaHash) {
-        for (final File ficheroEntrada : carpeta.listFiles()) {
-            if (ficheroEntrada.isDirectory()) {
-                ObtenerDatosDocumento(ficheroEntrada,tablaHash);
-            } else {
-                String nomDoc = (ficheroEntrada.getName());
-                String url = carpeta + "/" + nomDoc;
-                parseador(ficheroEntrada,tablaHash);
+    public void ObtenerDatosDocumento (EntityManager em, File carpeta,Hashtable<String,VocabularioEntity> tablaHash) throws IOException {
+
+        Persistencia persistencia = new Persistencia();
+        persistencia.abrirPersistencia(em);
+        int idDocumento = 0;
+        for (final File ficheroEntrada : carpeta.listFiles())
+        {
+
+            if (ficheroEntrada.isDirectory())
+            {
+                ObtenerDatosDocumento(em, ficheroEntrada,tablaHash);
             }
 
+            else
+            {
+                idDocumento++;
+                String nomDoc = (ficheroEntrada.getName());
+                String url = carpeta + "/" + nomDoc;
+                BufferedReader brTest = new BufferedReader(new FileReader(ficheroEntrada));
+                String titulo = brTest.readLine();
+                if (titulo.length() < 1)
+                {
+                    titulo = brTest.readLine();
+                }
+                DocumentoEntity documento = new DocumentoEntity(idDocumento,titulo,url);
+                em.persist(documento);
+                System.out.println("Guardado en BD el documento número " + idDocumento);
+                parseador(ficheroEntrada,tablaHash);
+            }
         }
+        em.getTransaction().commit();
     }
 
-
-
-
-
-    public void parseador(File file,Hashtable<String,VocabularioEntity> tablaHash)
+    public void parseador(File file,Hashtable<String,VocabularioEntity> tablaVocabulario)
     {
         //Hashtable<String,VocabularioEntity> tablaHash = new Hashtable<String, VocabularioEntity>();
-
-        HashMap<String,Integer> listaPosteo = new HashMap<String,Integer>();
+        HashMap<String,Integer> listaPosteo = new HashMap<>();
         LectorPalabras lector = new LectorPalabras();
         lector.readFile(file,listaPosteo);
 
@@ -37,21 +53,24 @@ public class Parseo {
             String palabra = (String)posteo.getKey();
             int cantVeces = (int)posteo.getValue();
 
-            if (tablaHash.containsKey(palabra)){
-                VocabularioEntity voc = tablaHash.get(palabra);
+            if (tablaVocabulario.containsKey(palabra)){
+                VocabularioEntity voc = tablaVocabulario.get(palabra);
                 if (cantVeces > voc.getMaxVecesEnDoc()){
                     VocabularioEntity vocabulario = new VocabularioEntity(palabra,voc.getCantDoc() + 1,cantVeces);
-                    tablaHash.put(palabra,vocabulario);
+                    tablaVocabulario.put(palabra,vocabulario);
                 }
                 else{
                     VocabularioEntity vocabulario = new VocabularioEntity(palabra,voc.getCantDoc() + 1,voc.getMaxVecesEnDoc());
-                    tablaHash.put(palabra,vocabulario);
+                    tablaVocabulario.put(palabra,vocabulario);
                 }
             }
             else{
                 VocabularioEntity vocabulario = new VocabularioEntity(palabra,1,cantVeces);
-                tablaHash.put(palabra,vocabulario);
+                tablaVocabulario.put(palabra,vocabulario);
             }
         }
     }
+
+
+
 }
