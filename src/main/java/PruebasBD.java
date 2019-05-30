@@ -29,8 +29,8 @@ public class PruebasBD {
        // persistencia.serializarTabla(tablaHash);
 /*      HashMap<String,Integer> listaPosteo = new HashMap<String,Integer>();
 
-        //File file1 = new File("DocumentosTP/0ddc809a.txt");
-        //parseo.parseador(file1,tablaHash);
+        File file1 = new File("DocumentosTP/0ddc809a.txt");
+        parseo.parseador(file1,tablaHash);
 
         //System.out.println(tablaHash.get("and"));
         // System.out.println(tablaHash.size());
