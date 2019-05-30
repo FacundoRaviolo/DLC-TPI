@@ -26,7 +26,8 @@ public class PruebasBD {
       //  persistencia.cerrarPersistencia(em);
       //  long endTime = System.nanoTime() - startTime;
        // System.out.println("Tiempo final: " + endTime);
-       // persistencia.serializarTabla(tablaHash);
+       //
+        // persistencia.serializarTabla(tablaHash);
 /*      HashMap<String,Integer> listaPosteo = new HashMap<String,Integer>();
 
         File file1 = new File("DocumentosTP/0ddc809a.txt");
