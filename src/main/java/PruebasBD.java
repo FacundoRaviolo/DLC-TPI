@@ -21,9 +21,10 @@ public class PruebasBD {
         Parseo parseo = new Parseo();
         File carpeta = new File("DocumentosTP");
         parseo.ObtenerDatosDocumento(em,carpeta,tablaHash);
-        System.out.println();
+
         persistencia.persistirVocabulario(em,tablaHash);
-        //persistencia.persistirPosteo(em,carpeta,tablaHash);
+
+        persistencia.persistirPosteo(em,carpeta);
         persistencia.cerrarPersistencia(em);
 
 

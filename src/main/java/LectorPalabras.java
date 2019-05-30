@@ -12,6 +12,7 @@ public class LectorPalabras {
         try
         {
             Scanner sc = new Scanner(f,"ISO-8859-1");
+            //Scanner sc = new Scanner(f,"Modern_Spanish_CI_AS");
             //sc.useDelimiter("[- \n\r/_,¡!@¿?.:«»;*\"º\\[\\]()=°ª%$#0123456789`}]+");
             sc.useDelimiter("[^\\p{IsAlphabetic}']+");
             String words;

@@ -27,54 +27,48 @@ public class Persistencia {
         em.close();
     }
 
-    public void persistirVocabulario(EntityManager em, Hashtable<String, VocabularioEntity> tablaHash) throws Exception {
-        int i = 0;
+    /*public void persistirVocabulario(EntityManager em, Hashtable<String, VocabularioEntity> tablaHash)
+    {
         abrirPersistencia(em);
         Iterator it = tablaHash.keySet().iterator();
         while (it.hasNext())
         {
             String clave = (String) it.next();
             VocabularioEntity voc =  tablaHash.get(clave);
-
-            if (!voc.getPalabra().equals(clave)){
-                System.out.println(clave +"-"+ voc.getPalabra());
-                throw new Exception("Entry y clave inconsistentes");
-            }
             //VocabularioEntity voc = tablaHash.get(it.next());
             em.persist(voc);
-            i++;
-            if (i%10000 == 0){
-                em.getTransaction().commit();
-                abrirPersistencia(em);
-            }
         }
         em.getTransaction().commit();
-        System.out.println("Persistido el vocabulario");
 
+    }*/
 
-
-        /*Set<Map.Entry<String,VocabularioEntity>> se = tablaHash.entrySet();
+    public void persistirVocabulario(EntityManager em, Hashtable<String, VocabularioEntity> tablaHash){
+        abrirPersistencia(em);
+        Set<Map.Entry<String,VocabularioEntity>> se = tablaHash.entrySet();
         Iterator<Map.Entry<String,VocabularioEntity>> it = se.iterator();
         while(it.hasNext())
         {
             Map.Entry<String,VocabularioEntity> entry = it.next();
-            em.persist(entry.getValue());
-            System.out.println("PALABRA " + entry.getKey());
+            //em.persist(entry.getValue());
+            String palabra = (String)entry.getKey();
+            int cantDoc = (int)entry.getValue().getCantDoc();
+            int maxVeces = (int)entry.getValue().getMaxVecesEnDoc();
+            VocabularioEntity voc = new VocabularioEntity(palabra,cantDoc,maxVeces);
+            em.persist(voc);
         }
         em.getTransaction().commit();
-        System.out.println("Persistido el vocabulario");*/
+        System.out.println("Persistido el vocabulario");
     }
 
-    public void persistirPosteo (EntityManager em, File carpeta, Hashtable<String,VocabularioEntity> tablaHash) throws IOException {
+    public void persistirPosteo (EntityManager em, File carpeta) throws IOException {
 
-        Persistencia persistencia = new Persistencia();
         int idDocumento = 0;
         for (final File ficheroEntrada : carpeta.listFiles())
         {
-            persistencia.abrirPersistencia(em);
+            abrirPersistencia(em);
             if (ficheroEntrada.isDirectory())
             {
-                persistirPosteo(em, ficheroEntrada,tablaHash);
+                persistirPosteo(em, ficheroEntrada);
             }
             else
             {
@@ -91,11 +85,15 @@ public class Persistencia {
                     PosteoEntity post = new PosteoEntity(palabra,idDocumento,cantVeces);
                     em.persist(post);
                 }
-                em.getTransaction().commit();
-
             }
+            System.out.println("Guardado el documento número " + idDocumento);
+            em.getTransaction().commit();
+            em.clear();
         }
 
+
     }
+
+
 
 }

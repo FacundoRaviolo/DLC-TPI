@@ -3,7 +3,7 @@
     <persistence-unit name="DocumentosPU">
         <!--provider>org.hibernate.jpa.HibernatePersistenceProvider</provider-->
         <properties>
-            <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://DESKTOP-6IB04CJ\SQLEXPRESS:1433;database=BaseDLC"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://DESKTOP-6IB04CJ\SQLEXPRESS:1433;database=BaseDLC;"/>
             <property name="javax.persistence.jdbc.user" value="newadm"/>
             <property name="javax.persistence.jdbc.password" value="adm"/>
             <property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
