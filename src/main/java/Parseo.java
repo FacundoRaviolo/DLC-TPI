@@ -7,7 +7,7 @@ import java.util.*;
 public class Parseo {
 
 
-    public void ObtenerDatosDocumento (EntityManager em, File carpeta,Hashtable<String,VocabularioEntity> tablaHash) throws IOException {
+    public void ObtenerDatosDocumento (EntityManager em, File carpeta,Hashtable<String,VocabularioEntity> tablaHash,Boolean flag) throws IOException {
 
         Persistencia persistencia = new Persistencia();
         persistencia.abrirPersistencia(em);
@@ -17,7 +17,7 @@ public class Parseo {
 
             if (ficheroEntrada.isDirectory())
             {
-                ObtenerDatosDocumento(em, ficheroEntrada,tablaHash);
+                ObtenerDatosDocumento(em, ficheroEntrada,tablaHash,flag);
             }
 
             else
@@ -32,7 +32,7 @@ public class Parseo {
                     titulo = brTest.readLine();
                 }
                 DocumentoEntity documento = new DocumentoEntity(idDocumento,titulo,url);
-                em.persist(documento);
+                if (flag){em.persist(documento);}
                 System.out.println("Guardado en BD el documento número " + idDocumento);
                 parseador(ficheroEntrada,tablaHash);
             }

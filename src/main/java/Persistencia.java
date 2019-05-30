@@ -2,10 +2,7 @@ import entidades.PosteoEntity;
 import entidades.VocabularioEntity;
 
 import javax.persistence.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class Persistencia {
@@ -27,7 +24,7 @@ public class Persistencia {
         em.close();
     }
 
-    /*public void persistirVocabulario(EntityManager em, Hashtable<String, VocabularioEntity> tablaHash)
+    public void persistirVocabulario(EntityManager em, Hashtable<String, VocabularioEntity> tablaHash)
     {
         abrirPersistencia(em);
         Iterator it = tablaHash.keySet().iterator();
@@ -35,14 +32,13 @@ public class Persistencia {
         {
             String clave = (String) it.next();
             VocabularioEntity voc =  tablaHash.get(clave);
-            //VocabularioEntity voc = tablaHash.get(it.next());
             em.persist(voc);
         }
         em.getTransaction().commit();
+        System.out.println("Persistido el vocabulario.");
+    }
 
-    }*/
-
-    public void persistirVocabulario(EntityManager em, Hashtable<String, VocabularioEntity> tablaHash){
+    /*public void persistirVocabulario(EntityManager em, Hashtable<String, VocabularioEntity> tablaHash){
         abrirPersistencia(em);
         Set<Map.Entry<String,VocabularioEntity>> se = tablaHash.entrySet();
         Iterator<Map.Entry<String,VocabularioEntity>> it = se.iterator();
@@ -58,7 +54,7 @@ public class Persistencia {
         }
         em.getTransaction().commit();
         System.out.println("Persistido el vocabulario");
-    }
+    }*/
 
     public void persistirPosteo (EntityManager em, File carpeta) throws IOException {
 
@@ -94,6 +90,29 @@ public class Persistencia {
 
     }
 
+    public void  serializarTabla (Hashtable hashtable) throws IOException {
+        try{
+            ObjectOutputStream grabarArchivo = new ObjectOutputStream(new FileOutputStream("tabla.dat"));
+            grabarArchivo.writeObject(hashtable);
+            grabarArchivo.close();
+            System.out.println("****Tabla grabada en el archivo****");
+        }
+        catch (Exception ex){
+            throw ex;
+        }
+    }
 
+    public Hashtable<String,VocabularioEntity>  leerTabla (String nombreArchivo) throws IOException, ClassNotFoundException {
+        try{
+            ObjectInputStream leerArchivo =  new ObjectInputStream(new FileInputStream(nombreArchivo));
+            Hashtable<String,VocabularioEntity> hashTable = (Hashtable<String,VocabularioEntity>)leerArchivo.readObject();
+            leerArchivo.close();
+            System.out.println("****Tabla leida del archivo****");
+            return hashTable;
+        }
+        catch (Exception ex){
+            throw ex;
+        }
+    }
 
 }
