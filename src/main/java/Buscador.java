@@ -4,41 +4,46 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.*;
 
-    // ESTO ESTÁ MAL!!!! SI YO ARMO UNA HashMap (o HashTable) Y DOS PALABRAS APARECEN EN LA MISMA CANTIDAD DE DOCUMENTOS,
-    // AL SER cantDoc LA CLAVE, NO SE PODRÁN GUARDAR AMBOS!!! CORREGIR. BUSCAR OTRA MANERA.
-
-public class Buscador {
+public class Buscador implements Comparator{
     public void busqueda(String consulta, Hashtable<String, VocabularioEntity> tablaHash)
     {
-        HashMap<Integer,VocabularioEntity> hashMap = new HashMap<>();
+        ArrayList<VocabularioEntity> listaVoc = new ArrayList<VocabularioEntity>();
         for (String word : consulta.split(" "))
         {
             VocabularioEntity termino = tablaHash.get(word);
-            int cantDoc = termino.getCantDoc();
-            hashMap.put(cantDoc,termino);
-        }
+            listaVoc.add(termino);
 
-        obtencionCandidatos(hashMap);
+        }
+        Buscador buscador = new Buscador();
+        Collections.sort(listaVoc,buscador);
+
+        obtencionCandidatos(listaVoc);
     }
 
-    public void obtencionCandidatos(HashMap<Integer,VocabularioEntity> hashMap)
+    public void obtencionCandidatos(ArrayList<VocabularioEntity> arrayList)
     {
-        Iterator iterator = hashMap.entrySet().iterator();
+        Iterator iterator = arrayList.iterator();
         Persistencia persistencia = new Persistencia();
         EntityManager em = persistencia.crearPersistencia();
         while (iterator.hasNext())
         {
-            Map.Entry termino = (Map.Entry) iterator.next();
-            VocabularioEntity voc = (VocabularioEntity)termino.getValue();
+            //Map.Entry termino = (Map.Entry) iterator.next();
+            VocabularioEntity voc = (VocabularioEntity)iterator.next();
             String palabra = voc.getPalabra();
-            int cantDoc = (int) termino.getKey();
-            Query query = em.createQuery("SELECT (posteo.vecesEnDoc) FROM PosteoEntity posteo WHERE posteo.palabra = '" + palabra + "' ORDER BY posteo.vecesEnDoc DESC");
+            //int cantDoc = (int) voc.getCantDoc();
+            Query query = em.createQuery("SELECT (posteo.idDocumento) FROM PosteoEntity posteo WHERE posteo.palabra = '" + palabra + "' ORDER BY posteo.vecesEnDoc DESC");
             List lista = query.setMaxResults(5).getResultList();
             System.out.println("Lista de " + palabra + ": " + lista.toString());
         }
         persistencia.cerrarPersistencia(em);
-        System.out.println(hashMap.toString());
+        //System.out.println(arrayList.toString());
     }
 
 
+    @Override
+    public int compare(Object o1, Object o2) {
+        VocabularioEntity v1 =(VocabularioEntity)o1;
+        VocabularioEntity v2 =(VocabularioEntity)o2;
+        return new Integer(v1.getCantDoc()).compareTo(new Integer(v2.getCantDoc()));
+    }
 }
