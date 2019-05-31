@@ -5,7 +5,7 @@ import javax.persistence.Query;
 import java.util.*;
 
     // ESTO ESTÁ MAL!!!! SI YO ARMO UNA HashMap (o HashTable) Y DOS PALABRAS APARECEN EN LA MISMA CANTIDAD DE DOCUMENTOS,
-    // AL SER cantDoc LA CLAVE, NO SE PODRÁN GUARDAR AMBOS!!! CORREGIR. BUSCAR OTRA MANERA
+    // AL SER cantDoc LA CLAVE, NO SE PODRÁN GUARDAR AMBOS!!! CORREGIR. BUSCAR OTRA MANERA.
 
 public class Buscador {
     public void busqueda(String consulta, Hashtable<String, VocabularioEntity> tablaHash)

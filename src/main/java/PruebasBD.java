@@ -37,7 +37,7 @@ public class PruebasBD {
 
         Buscador buscador = new Buscador();
         // HABRÍA QUE CHEQUEAR QUE LA CONSULTA SIEMPRE SE TRANSFORME A MINÚSCULA!!!!!!!!!!!!!!!!!
-        String consulta = "while a and e sanctae";
+        String consulta = "while a and e sanctae flower";
         buscador.busqueda(consulta, hT1);
     }
 }
