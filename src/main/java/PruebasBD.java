@@ -35,54 +35,60 @@ public class PruebasBD {
 
         persistencia.serializarTabla(tablaHash);
         */
-        Persistencia persistencia = new Persistencia();
+        //Persistencia persistencia = new Persistencia();
         System.out.println("Armando la hashtable de vocabulario...");
-        final Hashtable<String,VocabularioEntity> vocabulario = persistencia.leerTabla("tabla.dat");
+        //final Hashtable<String,VocabularioEntity> vocabulario = persistencia.leerTabla("tabla.dat");
         System.out.println("Hashtable armada con éxito.");
+        //final EntityManager em = persistencia.crearPersistencia();
+        //persistencia.abrirPersistencia(em);
 
         JFrame interfaz = new JFrame();
 
-        interfaz.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        interfaz.setTitle("BOKE Buscador");
-
-        final ImageIcon imagen = new ImageIcon("C:/Users/levia/OneDrive/Documentos/Facultad/DLC/DLC-TPI/Boton.png");
-        JLabel labelBusqueda = new JLabel(){
-            public void fondo(Graphics g){
-                g.drawImage(imagen.getImage(),0,0,null);
-                fondo(g);
-            }
-        };
-        labelBusqueda.setBounds(10,50,100,30);
-        labelBusqueda.setOpaque(false);
-        interfaz.getContentPane().add(labelBusqueda);
-        labelBusqueda.setText("Caca");
-        interfaz.add(labelBusqueda);
+        final JLabel logo = new JLabel();
+        logo.setIcon(new ImageIcon("imagenes/Logo Buscador.png"));
+        logo.setBounds(400,20,600,125);
 
         final JTextField textoBusqueda = new JTextField();
-        textoBusqueda.setBounds(155,50,140,20);
-
-        JButton buttonBusqueda = new JButton("Buscar");
-        buttonBusqueda.setBounds(300,50,80,20);
+        textoBusqueda.setBounds(445,20+125+20,400,30);
+        JButton buttonBusqueda = new JButton();
+        buttonBusqueda.setIcon(new ImageIcon("imagenes/Boton.png"));
+        buttonBusqueda.setBounds(445+400+10,20+125+20,100,30);
         buttonBusqueda.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String consulta = textoBusqueda.getText();
                 consulta = consulta.toLowerCase();
                 Buscador buscador = new Buscador();
-                buscador.busqueda(consulta, vocabulario);
+                //buscador.busqueda(consulta, vocabulario, em);
             }
         });
 
         interfaz.add(buttonBusqueda);
         interfaz.add(textoBusqueda);
+        interfaz.add(logo);
 
-        interfaz.setSize(700,700);
+        interfaz.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        interfaz.setTitle("BOKE Buscador");
+        interfaz.setIconImage(Toolkit.getDefaultToolkit().getImage("imagenes/favicon.png"));
+
+        interfaz.setSize(1400,800);
+        interfaz.setMinimumSize(new Dimension(1400,800));
+
         interfaz.setLayout(null);
         interfaz.setVisible(true);
+
+
+//        interfaz.setMinimumSize(new Dimension(800,600));
 
         //Buscador buscador = new Buscador();
         //String consulta = "CeRn";
         //consulta = consulta.toLowerCase();
         //buscador.busqueda(consulta, hT1);
+
+        //persistencia.cerrarPersistencia(em);
+
+
+
     }
+
 }

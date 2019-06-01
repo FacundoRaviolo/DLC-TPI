@@ -7,26 +7,26 @@ import javax.persistence.Query;
 import java.util.*;
 
 public class Buscador implements Comparator{
-    public void busqueda(String consulta, Hashtable<String, VocabularioEntity> tablaHash)
+    public void busqueda(String consulta, Hashtable<String, VocabularioEntity> tablaHash,EntityManager em)
     {
         ArrayList<VocabularioEntity> listaVoc = new ArrayList<VocabularioEntity>();
         for (String word : consulta.split(" "))
         {
-            VocabularioEntity termino = tablaHash.get(word);
-            listaVoc.add(termino);
-
+            if (tablaHash.containsKey(word))
+            {
+                VocabularioEntity termino = tablaHash.get(word);
+                listaVoc.add(termino);
+            }
         }
         Buscador buscador = new Buscador();
         Collections.sort(listaVoc,buscador);
 
-        obtencionCandidatos(listaVoc);
+        obtencionCandidatos(listaVoc,em);
     }
 
-    public void obtencionCandidatos(ArrayList<VocabularioEntity> arrayList)
+    public void obtencionCandidatos(ArrayList<VocabularioEntity> arrayList,EntityManager em)
     {
         Iterator iterator = arrayList.iterator();
-        Persistencia persistencia = new Persistencia();
-        EntityManager em = persistencia.crearPersistencia();
         HashMap<Integer,Double> listaDocumentosPeso = new HashMap<>();
 
         Query consulta = em.createQuery("SELECT COUNT(documento.idDocumento) FROM DocumentoEntity documento");
@@ -60,8 +60,15 @@ public class Buscador implements Comparator{
 
         }
         LinkedHashMap listaOrden = ordenamientoHashMap(listaDocumentosPeso);
-        mostrarDatosDocumentos(listaOrden,em);
-        persistencia.cerrarPersistencia(em);
+        if (listaOrden.isEmpty())
+        {
+            System.out.println("No se encontraron resultados para la búsqueda realizada.");
+        }
+        else
+        {
+            String cadena = mostrarDatosDocumentos(listaOrden,em);
+            System.out.println(cadena);
+        }
     }
 
     public LinkedHashMap<Integer, Double> ordenamientoHashMap(HashMap<Integer, Double> hashMap) {
@@ -92,12 +99,11 @@ public class Buscador implements Comparator{
         return sortedMap;
     }
 
-    public void mostrarDatosDocumentos(HashMap<Integer, Double> listaFinal, EntityManager em)
+    public String mostrarDatosDocumentos(HashMap<Integer, Double> listaFinal, EntityManager em)
     {
         int numero = 0;
+        String cadena = "\n";
 
-        //Persistencia persistencia = new Persistencia();
-        //EntityManager em = persistencia.crearPersistencia();
         Iterator iterator = listaFinal.entrySet().iterator();
         while (iterator.hasNext())
         {
@@ -110,19 +116,14 @@ public class Buscador implements Comparator{
                 Query query = em.createNativeQuery("SELECT Documento.idDocumento, titulo, url FROM Documento WHERE idDocumento = ?1", DocumentoEntity.class);
                 Object obj = query.setParameter(1,id).getSingleResult();
                 DocumentoEntity doc = (DocumentoEntity) obj;
-                System.out.println();
-                System.out.println("Documento número " + numero + ": ");
-                System.out.println("ID: " + doc.getIdDocumento());
-                System.out.println("Título: " + doc.getTitulo());
-                System.out.println("URL: " + doc.getUrl());
-                System.out.println("Peso: " + peso);
+                cadena += "Documento número " + numero + ": \nID: " + doc.getIdDocumento() + "\nTítulo: " + doc.getTitulo() + "\nURL: " + doc.getUrl() + "\nPeso: " + peso + "\n\n";
             }
             else
             {
                 break;
             }
         }
-        //persistencia.cerrarPersistencia(em);
+        return cadena;
     }
 
     @Override
