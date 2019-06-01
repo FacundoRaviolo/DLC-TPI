@@ -36,8 +36,8 @@ public class PruebasBD {
         System.out.println("Hashtable armada");
 
         Buscador buscador = new Buscador();
-        // HABRÍA QUE CHEQUEAR QUE LA CONSULTA SIEMPRE SE TRANSFORME A MINÚSCULA!!!!!!!!!!!!!!!!!
-        String consulta = "while a and e sanctae flower";
+        String consulta = "CeRn";
+        consulta = consulta.toLowerCase();
         buscador.busqueda(consulta, hT1);
     }
 }
