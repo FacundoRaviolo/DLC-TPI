@@ -4,10 +4,11 @@ import entidades.VocabularioEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Buscador implements Comparator{
-    public String busqueda(String consulta, Hashtable<String, VocabularioEntity> tablaHash,EntityManager em)
+    public ArrayList<String> busqueda(String consulta, Hashtable<String, VocabularioEntity> tablaHash,EntityManager em)
     {
         ArrayList<VocabularioEntity> listaVoc = new ArrayList<VocabularioEntity>();
         for (String word : consulta.split(" "))
@@ -21,15 +22,15 @@ public class Buscador implements Comparator{
         Buscador buscador = new Buscador();
         Collections.sort(listaVoc,buscador);
 
-        String cadena = obtencionCandidatos(listaVoc,em);
-        return cadena;
+        ArrayList<String> listaResultados = obtencionCandidatos(listaVoc,em);
+        return listaResultados;
     }
 
-    public String obtencionCandidatos(ArrayList<VocabularioEntity> arrayList,EntityManager em)
+    public ArrayList<String> obtencionCandidatos(ArrayList<VocabularioEntity> arrayList,EntityManager em)
     {
         Iterator iterator = arrayList.iterator();
         HashMap<Integer,Double> listaDocumentosPeso = new HashMap<>();
-        String cadena = "";
+        ArrayList<String> listaResultados = new ArrayList<>();
 
         Query consulta = em.createQuery("SELECT COUNT(documento.idDocumento) FROM DocumentoEntity documento");
         long cantDocTotal = (long)consulta.getSingleResult();
@@ -64,14 +65,14 @@ public class Buscador implements Comparator{
         LinkedHashMap listaOrden = ordenamientoHashMap(listaDocumentosPeso);
         if (listaOrden.isEmpty())
         {
-            cadena = "No se encontraron resultados para la búsqueda realizada.";
+            listaResultados.add("No se encontraron resultados para la búsqueda realizada.");
         }
         else
         {
-            cadena = mostrarDatosDocumentos(listaOrden,em);
+            listaResultados = mostrarDatosDocumentos(listaOrden,em);
             //System.out.println(cadena);
         }
-        return cadena;
+        return listaResultados;
     }
 
     public LinkedHashMap<Integer, Double> ordenamientoHashMap(HashMap<Integer, Double> hashMap) {
@@ -102,10 +103,10 @@ public class Buscador implements Comparator{
         return sortedMap;
     }
 
-    public String mostrarDatosDocumentos(HashMap<Integer, Double> listaFinal, EntityManager em)
+    public ArrayList<String> mostrarDatosDocumentos(HashMap<Integer, Double> listaFinal, EntityManager em)
     {
         int numero = 0;
-        String cadena = "\n";
+        ArrayList<String> listaResultados = new ArrayList<>();
 
         Iterator iterator = listaFinal.entrySet().iterator();
         while (iterator.hasNext())
@@ -119,15 +120,26 @@ public class Buscador implements Comparator{
                 Query query = em.createNativeQuery("SELECT Documento.idDocumento, titulo, url FROM Documento WHERE idDocumento = ?1", DocumentoEntity.class);
                 Object obj = query.setParameter(1,id).getSingleResult();
                 DocumentoEntity doc = (DocumentoEntity) obj;
-                cadena += "Documento número " + numero + ": \nID: " + doc.getIdDocumento() + "\nTítulo: " + doc.getTitulo() + "\nURL: " + doc.getUrl() + "\nPeso: " + peso + "\n\n";
+                String cadena = "<< " + doc.getTitulo().toUpperCase() + " >>\n• ID: " + doc.getIdDocumento() + "\n• URL: " + doc.getUrl() + "\n• Peso del documento: " + peso;
+                listaResultados.add(cadena);
             }
             else
             {
                 break;
             }
         }
-        return cadena;
+        return listaResultados;
     }
+
+    public void openWebPage(String url){
+        try {
+            java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
+        }
+        catch (java.io.IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 
     @Override
     public int compare(Object o1, Object o2) {

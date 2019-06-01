@@ -1,17 +1,13 @@
-import entidades.DocumentoEntity;
-import entidades.PosteoEntity;
 import entidades.VocabularioEntity;
-
-import javax.persistence.*;
+import org.apache.commons.lang3.StringUtils;
+import javax.persistence.EntityManager;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
 
 public class PruebasBD {
 
@@ -44,42 +40,103 @@ public class PruebasBD {
 
         final JFrame interfaz = new JFrame();
 
-        final JLabel labelResultado = new JLabel();
-        //logo.setIcon(new ImageIcon("imagenes/Logo Buscador.png"));
-        labelResultado.setBounds(400,40+125+20+30+20,600,600);
+        final JLabel logo = new JLabel();
+        logo.setIcon(new ImageIcon("imagenes/Logo Buscador.png"));
+        logo.setBounds(400,40,600,125);
 
         final JTextField textoBusqueda = new JTextField();
         textoBusqueda.setBounds(445,40+125+20,400,30);
-        JButton buttonBusqueda = new JButton();
+
+        final JLabel autores = new JLabel("Realizado por Levián Lastra, Facundo Raviolo y Naim Saadi para DLC 2019",SwingConstants.CENTER);
+        autores.setBounds(300,40+125+20+30+20+90+90+90+90+90,800,70);
+
+        final JButton buttonBusqueda = new JButton();
         buttonBusqueda.setIcon(new ImageIcon("imagenes/Boton.png"));
         buttonBusqueda.setBounds(445+400+10,40+125+20,100,30);
         buttonBusqueda.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
+                interfaz.getContentPane().removeAll();
+                interfaz.repaint();
+                interfaz.add(logo);
+                interfaz.add(textoBusqueda);
+                interfaz.add(buttonBusqueda);
+                interfaz.add(autores);
                 String consulta = textoBusqueda.getText();
                 consulta = consulta.toLowerCase();
                 Buscador buscador = new Buscador();
-                String resultado = buscador.busqueda(consulta, vocabulario, em);
-                labelResultado.setText(resultado);
-                interfaz.add(labelResultado);
+                ArrayList<String> listaResultados = buscador.busqueda(consulta, vocabulario, em);
+              /*
+                if (listaResultados.size() == 1)
+                {
+                    if (listaResultados.get(0) == "No se encontraron resultados para la búsqueda realizada.")
+                    {
+                        JTextField textoBusquedaVacia = new JTextField("porq eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+                        textoBusquedaVacia.setEditable(false);
+                        textoBusquedaVacia.setBackground(new java.awt.Color(219,219,219));
+                        textoBusquedaVacia.setBounds(300,40+125+20+30+20,800,110);
+                        textoBusquedaVacia.setBorder(new LineBorder(new java.awt.Color(219,219,219),2));
+                        interfaz.add(textoBusquedaVacia);
+                    }
+                }
+
+               */
+
+                int altura = 40+125+20+30+20;
+                int numero = 0;
+                for (String cadena : listaResultados)
+                {
+                    JTextPane texto = new JTextPane();
+                    final String cad = listaResultados.get(numero);
+                    texto.setText(cad);
+                    texto.setEditable(false);
+                    texto.setBackground(new java.awt.Color(219,219,219));
+                    texto.setBounds(300,altura,800,70);
+                    texto.setBorder(new LineBorder(new java.awt.Color(219,219,219),2));
+                    interfaz.add(texto);
+                    JButton link = new JButton();
+                    link.setIcon(new ImageIcon("imagenes/Ir.png"));
+                    link.addActionListener( new ActionListener()
+                    {
+                        public void actionPerformed(ActionEvent e)
+                        {
+                            String result = StringUtils.substringBetween(cad, "DocumentosTP/", "\n");
+                            Buscador buscaLink = new Buscador();
+                            String url = "F:/Documents/Facultad/DLC/TP-Unico/DLC-TPI/DocumentosTP/" + result;
+                            buscaLink.openWebPage(url);
+                        }
+                    });
+                    link.setBounds(300+800+10,altura,45,70);
+                    interfaz.add(link);
+                    numero++;
+                    String imagen = "imagenes/" + numero + ".png";
+                    JLabel img = new JLabel();
+                    img.setIcon(new ImageIcon(imagen));
+                    img.setBounds(245,altura,45,70);
+                    interfaz.add(img);
+                    altura = altura + 70+20;
+
+                }
             }
         });
 
-        interfaz.add(buttonBusqueda);
+        interfaz.add(logo);
         interfaz.add(textoBusqueda);
+        interfaz.add(buttonBusqueda);
+        interfaz.add(autores);
 
         interfaz.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        interfaz.setTitle("BOKE Buscador");
+        interfaz.setTitle("BOKE Search");
         interfaz.setIconImage(Toolkit.getDefaultToolkit().getImage("imagenes/favicon.png"));
 
         interfaz.setSize(1400,800);
         interfaz.setMinimumSize(new Dimension(1400,800));
-
+        //interfaz.setMaximumSize(new Dimension(1400,800));
         interfaz.setLayout(null);
         interfaz.setVisible(true);
+        interfaz.setLocationRelativeTo(null);
 
-
-//        interfaz.setMinimumSize(new Dimension(800,600));
 
         //Buscador buscador = new Buscador();
         //String consulta = "CeRn";
@@ -91,5 +148,9 @@ public class PruebasBD {
 
 
     }
+
+
+
+
 
 }
