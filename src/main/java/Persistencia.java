@@ -95,7 +95,6 @@ public class Persistencia {
             ObjectOutputStream grabarArchivo = new ObjectOutputStream(new FileOutputStream("tabla.dat"));
             grabarArchivo.writeObject(hashtable);
             grabarArchivo.close();
-            System.out.println("****Tabla grabada en el archivo****");
         }
         catch (Exception ex){
             throw ex;

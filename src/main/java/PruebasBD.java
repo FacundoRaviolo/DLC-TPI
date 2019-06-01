@@ -35,9 +35,10 @@ public class PruebasBD {
 
         persistencia.serializarTabla(tablaHash);
         */
-        //Persistencia persistencia = new Persistencia();
-        //Hashtable<String,VocabularioEntity> hT1 = persistencia.leerTabla("tabla.dat");
-        //System.out.println("Hashtable armada");
+        Persistencia persistencia = new Persistencia();
+        System.out.println("Armando la hashtable de vocabulario...");
+        final Hashtable<String,VocabularioEntity> vocabulario = persistencia.leerTabla("tabla.dat");
+        System.out.println("Hashtable armada con éxito.");
 
         JFrame interfaz = new JFrame();
 
@@ -65,9 +66,10 @@ public class PruebasBD {
         buttonBusqueda.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                final String consulta = textoBusqueda.getText().toLowerCase();
-                //Buscador buscador = new Buscador();
-                //buscador.busqueda(consulta, hT1);
+                String consulta = textoBusqueda.getText();
+                consulta = consulta.toLowerCase();
+                Buscador buscador = new Buscador();
+                buscador.busqueda(consulta, vocabulario);
             }
         });
 
