@@ -7,7 +7,7 @@ import javax.persistence.Query;
 import java.util.*;
 
 public class Buscador implements Comparator{
-    public void busqueda(String consulta, Hashtable<String, VocabularioEntity> tablaHash,EntityManager em)
+    public String busqueda(String consulta, Hashtable<String, VocabularioEntity> tablaHash,EntityManager em)
     {
         ArrayList<VocabularioEntity> listaVoc = new ArrayList<VocabularioEntity>();
         for (String word : consulta.split(" "))
@@ -21,13 +21,15 @@ public class Buscador implements Comparator{
         Buscador buscador = new Buscador();
         Collections.sort(listaVoc,buscador);
 
-        obtencionCandidatos(listaVoc,em);
+        String cadena = obtencionCandidatos(listaVoc,em);
+        return cadena;
     }
 
-    public void obtencionCandidatos(ArrayList<VocabularioEntity> arrayList,EntityManager em)
+    public String obtencionCandidatos(ArrayList<VocabularioEntity> arrayList,EntityManager em)
     {
         Iterator iterator = arrayList.iterator();
         HashMap<Integer,Double> listaDocumentosPeso = new HashMap<>();
+        String cadena = "";
 
         Query consulta = em.createQuery("SELECT COUNT(documento.idDocumento) FROM DocumentoEntity documento");
         long cantDocTotal = (long)consulta.getSingleResult();
@@ -62,13 +64,14 @@ public class Buscador implements Comparator{
         LinkedHashMap listaOrden = ordenamientoHashMap(listaDocumentosPeso);
         if (listaOrden.isEmpty())
         {
-            System.out.println("No se encontraron resultados para la búsqueda realizada.");
+            cadena = "No se encontraron resultados para la búsqueda realizada.";
         }
         else
         {
-            String cadena = mostrarDatosDocumentos(listaOrden,em);
-            System.out.println(cadena);
+            cadena = mostrarDatosDocumentos(listaOrden,em);
+            //System.out.println(cadena);
         }
+        return cadena;
     }
 
     public LinkedHashMap<Integer, Double> ordenamientoHashMap(HashMap<Integer, Double> hashMap) {

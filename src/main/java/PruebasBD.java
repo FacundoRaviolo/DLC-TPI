@@ -35,37 +35,38 @@ public class PruebasBD {
 
         persistencia.serializarTabla(tablaHash);
         */
-        //Persistencia persistencia = new Persistencia();
+        Persistencia persistencia = new Persistencia();
         System.out.println("Armando la hashtable de vocabulario...");
-        //final Hashtable<String,VocabularioEntity> vocabulario = persistencia.leerTabla("tabla.dat");
+        final Hashtable<String,VocabularioEntity> vocabulario = persistencia.leerTabla("tabla.dat");
         System.out.println("Hashtable armada con éxito.");
-        //final EntityManager em = persistencia.crearPersistencia();
-        //persistencia.abrirPersistencia(em);
+        final EntityManager em = persistencia.crearPersistencia();
+        persistencia.abrirPersistencia(em);
 
-        JFrame interfaz = new JFrame();
+        final JFrame interfaz = new JFrame();
 
-        final JLabel logo = new JLabel();
-        logo.setIcon(new ImageIcon("imagenes/Logo Buscador.png"));
-        logo.setBounds(400,20,600,125);
+        final JLabel labelResultado = new JLabel();
+        //logo.setIcon(new ImageIcon("imagenes/Logo Buscador.png"));
+        labelResultado.setBounds(400,40+125+20+30+20,600,600);
 
         final JTextField textoBusqueda = new JTextField();
-        textoBusqueda.setBounds(445,20+125+20,400,30);
+        textoBusqueda.setBounds(445,40+125+20,400,30);
         JButton buttonBusqueda = new JButton();
         buttonBusqueda.setIcon(new ImageIcon("imagenes/Boton.png"));
-        buttonBusqueda.setBounds(445+400+10,20+125+20,100,30);
+        buttonBusqueda.setBounds(445+400+10,40+125+20,100,30);
         buttonBusqueda.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String consulta = textoBusqueda.getText();
                 consulta = consulta.toLowerCase();
                 Buscador buscador = new Buscador();
-                //buscador.busqueda(consulta, vocabulario, em);
+                String resultado = buscador.busqueda(consulta, vocabulario, em);
+                labelResultado.setText(resultado);
+                interfaz.add(labelResultado);
             }
         });
 
         interfaz.add(buttonBusqueda);
         interfaz.add(textoBusqueda);
-        interfaz.add(logo);
 
         interfaz.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         interfaz.setTitle("BOKE Buscador");
