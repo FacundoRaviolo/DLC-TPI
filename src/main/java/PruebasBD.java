@@ -3,6 +3,10 @@ import entidades.PosteoEntity;
 import entidades.VocabularioEntity;
 
 import javax.persistence.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -31,13 +35,52 @@ public class PruebasBD {
 
         persistencia.serializarTabla(tablaHash);
         */
-        Persistencia persistencia = new Persistencia();
-        Hashtable<String,VocabularioEntity> hT1 = persistencia.leerTabla("tabla.dat");
-        System.out.println("Hashtable armada");
+        //Persistencia persistencia = new Persistencia();
+        //Hashtable<String,VocabularioEntity> hT1 = persistencia.leerTabla("tabla.dat");
+        //System.out.println("Hashtable armada");
 
-        Buscador buscador = new Buscador();
-        String consulta = "CeRn";
-        consulta = consulta.toLowerCase();
-        buscador.busqueda(consulta, hT1);
+        JFrame interfaz = new JFrame();
+
+        interfaz.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        interfaz.setTitle("BOKE Buscador");
+
+        final ImageIcon imagen = new ImageIcon("C:/Users/levia/OneDrive/Documentos/Facultad/DLC/DLC-TPI/Boton.png");
+        JLabel labelBusqueda = new JLabel(){
+            public void fondo(Graphics g){
+                g.drawImage(imagen.getImage(),0,0,null);
+                fondo(g);
+            }
+        };
+        labelBusqueda.setBounds(10,50,100,30);
+        labelBusqueda.setOpaque(false);
+        interfaz.getContentPane().add(labelBusqueda);
+        labelBusqueda.setText("Caca");
+        interfaz.add(labelBusqueda);
+
+        final JTextField textoBusqueda = new JTextField();
+        textoBusqueda.setBounds(155,50,140,20);
+
+        JButton buttonBusqueda = new JButton("Buscar");
+        buttonBusqueda.setBounds(300,50,80,20);
+        buttonBusqueda.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                final String consulta = textoBusqueda.getText().toLowerCase();
+                //Buscador buscador = new Buscador();
+                //buscador.busqueda(consulta, hT1);
+            }
+        });
+
+        interfaz.add(buttonBusqueda);
+        interfaz.add(textoBusqueda);
+
+        interfaz.setSize(700,700);
+        interfaz.setLayout(null);
+        interfaz.setVisible(true);
+
+        //Buscador buscador = new Buscador();
+        //String consulta = "CeRn";
+        //consulta = consulta.toLowerCase();
+        //buscador.busqueda(consulta, hT1);
     }
 }

@@ -114,5 +114,4 @@ public class Persistencia {
             throw ex;
         }
     }
-
 }
