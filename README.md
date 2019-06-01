@@ -1,5 +1,5 @@
 # DLC-TPI
-Trabajo práctico de la materia "Diesño de Lenguajes de Consulta", del año 2019.
+Trabajo práctico de la materia "Diseño de Lenguajes de Consulta", del año 2019.
 
 Enunciado y Consignas:
 
