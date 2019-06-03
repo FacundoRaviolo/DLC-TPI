@@ -7,7 +7,7 @@ import java.util.*;
 public class Parseo {
 
 
-    public void ObtenerDatosDocumento (EntityManager em, File carpeta,Hashtable<String,VocabularioEntity> tablaHash,Boolean flag) throws IOException {
+   /* public void ObtenerDatosDocumento (EntityManager em, File carpeta,Hashtable<String,VocabularioEntity> tablaHash,Boolean flag) throws IOException {
 
         Persistencia persistencia = new Persistencia();
         persistencia.abrirPersistencia(em);
@@ -33,6 +33,47 @@ public class Parseo {
                 }
                 DocumentoEntity documento = new DocumentoEntity(idDocumento,titulo,url);
                 if (flag){em.persist(documento);}
+                System.out.println("Guardado en BD el documento número " + idDocumento);
+                parseador(ficheroEntrada,tablaHash);
+            }
+        }
+        em.getTransaction().commit();
+    }
+
+*/
+    public void ObtenerDatosDocumento (EntityManager em, File carpeta,Hashtable<String,VocabularioEntity> tablaHash,Boolean flag) throws IOException {
+
+        int idDocumento = 0;
+
+        if (flag){
+
+            Query consulta = em.createNativeQuery("SELECT Documento.idDocumento FROM Documento ORDER BY idDocumento DESC",DocumentoEntity.class);
+            idDocumento = (int)consulta.getFirstResult();
+            System.out.println(idDocumento);
+
+        }
+
+        for (final File ficheroEntrada : carpeta.listFiles())
+        {
+
+            if (ficheroEntrada.isDirectory())
+            {
+                ObtenerDatosDocumento(em, ficheroEntrada,tablaHash,flag);
+            }
+
+            else
+            {
+                idDocumento++;
+                String nomDoc = (ficheroEntrada.getName());
+                String url = carpeta + "/" + nomDoc;
+                BufferedReader brTest = new BufferedReader(new FileReader(ficheroEntrada));
+                String titulo = brTest.readLine();
+                if (titulo.length() < 1)
+                {
+                    titulo = brTest.readLine();
+                }
+                DocumentoEntity documento = new DocumentoEntity(idDocumento,titulo,url);
+                em.persist(documento);
                 System.out.println("Guardado en BD el documento número " + idDocumento);
                 parseador(ficheroEntrada,tablaHash);
             }
