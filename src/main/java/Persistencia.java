@@ -1,3 +1,4 @@
+import entidades.DocumentoEntity;
 import entidades.PosteoEntity;
 import entidades.VocabularioEntity;
 
@@ -32,39 +33,22 @@ public class Persistencia {
         {
             String clave = (String) it.next();
             VocabularioEntity voc =  tablaHash.get(clave);
-            em.persist(voc);
+            em.merge(voc);
         }
         em.getTransaction().commit();
         System.out.println("Persistido el vocabulario.");
     }
 
-    /*public void persistirVocabulario(EntityManager em, Hashtable<String, VocabularioEntity> tablaHash){
-        abrirPersistencia(em);
-        Set<Map.Entry<String,VocabularioEntity>> se = tablaHash.entrySet();
-        Iterator<Map.Entry<String,VocabularioEntity>> it = se.iterator();
-        while(it.hasNext())
-        {
-            Map.Entry<String,VocabularioEntity> entry = it.next();
-            //em.persist(entry.getValue());
-            String palabra = (String)entry.getKey();
-            int cantDoc = (int)entry.getValue().getCantDoc();
-            int maxVeces = (int)entry.getValue().getMaxVecesEnDoc();
-            VocabularioEntity voc = new VocabularioEntity(palabra,cantDoc,maxVeces);
-            em.persist(voc);
-        }
-        em.getTransaction().commit();
-        System.out.println("Persistido el vocabulario");
-    }*/
+    public void persistirPosteo (EntityManager em, File carpeta,int docCargados) throws IOException {
 
-    public void persistirPosteo (EntityManager em, File carpeta) throws IOException {
+        int idDocumento = obtenerMaxIdDoc(em,true) - docCargados;
 
-        int idDocumento = 0;
         for (final File ficheroEntrada : carpeta.listFiles())
         {
             abrirPersistencia(em);
             if (ficheroEntrada.isDirectory())
             {
-                persistirPosteo(em, ficheroEntrada);
+                persistirPosteo(em, ficheroEntrada, docCargados);
             }
             else
             {
@@ -90,15 +74,33 @@ public class Persistencia {
 
     }
 
-    public void  serializarTabla (Hashtable hashtable) throws IOException {
-        try{
-            ObjectOutputStream grabarArchivo = new ObjectOutputStream(new FileOutputStream("tabla.dat"));
-            grabarArchivo.writeObject(hashtable);
-            grabarArchivo.close();
+    static int obtenerMaxIdDoc(EntityManager em, Boolean flag) {
+        int idDocumento = 0;
+
+        if (flag){
+
+            Query consulta = em.createNativeQuery("SELECT Documento.idDocumento, titulo, url FROM Documento ORDER BY Documento.idDocumento DESC", DocumentoEntity.class);
+            List lista = consulta.setMaxResults(1).getResultList();
+            DocumentoEntity doc = (DocumentoEntity)lista.get(0);
+            idDocumento = doc.getIdDocumento();
+
         }
-        catch (Exception ex){
-            throw ex;
+        return idDocumento;
+    }
+
+    public Hashtable<String,VocabularioEntity>  cargarTabla(EntityManager em) {
+
+        Hashtable<String,VocabularioEntity> hashTable = new Hashtable<>();
+
+        Query consulta = em.createNativeQuery("SELECT Vocabulario.palabra, cantDoc, maxVecesEnDoc FROM Vocabulario", VocabularioEntity.class);
+        List lista = consulta.getResultList();
+        Iterator iterator = lista.iterator();
+        while (iterator.hasNext())
+        {
+            VocabularioEntity voc = (VocabularioEntity)iterator.next();
+            hashTable.put(voc.getPalabra(),voc);
         }
+        return hashTable;
     }
 
     public Hashtable<String,VocabularioEntity>  leerTabla (String nombreArchivo) throws IOException, ClassNotFoundException {
@@ -106,11 +108,11 @@ public class Persistencia {
             ObjectInputStream leerArchivo =  new ObjectInputStream(new FileInputStream(nombreArchivo));
             Hashtable<String,VocabularioEntity> hashTable = (Hashtable<String,VocabularioEntity>)leerArchivo.readObject();
             leerArchivo.close();
-            System.out.println("****Tabla leida del archivo****");
             return hashTable;
         }
         catch (Exception ex){
             throw ex;
         }
     }
+
 }
