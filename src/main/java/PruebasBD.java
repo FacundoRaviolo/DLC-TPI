@@ -28,7 +28,6 @@ public class PruebasBD {
         persistencia.cerrarPersistencia(em);
         long endTime = System.nanoTime() - startTime;
         System.out.println("Tiempo final: " + endTime);
-
         persistencia.serializarTabla(tablaHash);
         */
         Persistencia persistencia = new Persistencia();
