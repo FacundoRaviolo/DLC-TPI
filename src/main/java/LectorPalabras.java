@@ -7,6 +7,7 @@ public class LectorPalabras {
     public LectorPalabras() {
     }
 
+
     /**
      * Este método recibe un archivo de texto y en base a sus palabras las carga en una lista de posteo.
      * @param f archivo del cual se obtienen las palabras.
