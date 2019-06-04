@@ -7,13 +7,16 @@ public class LectorPalabras {
     public LectorPalabras() {
     }
 
+    /**
+     * Este método recibe un archivo de texto y en base a sus palabras las carga en una lista de posteo.
+     * @param f archivo del cual se obtienen las palabras.
+     * @param listaPosteo HashMap que contiene como clave la palabra y la cantidad de veces que aparece en el documento.
+     */
     public void readFile(File f, HashMap listaPosteo)
     {
         try
         {
             Scanner sc = new Scanner(f,"ISO-8859-1");
-            //Scanner sc = new Scanner(f,"Modern_Spanish_CI_AS");
-            //sc.useDelimiter("[- \n\r/_,¡!@¿?.:«»;*\"º\\[\\]()=°ª%$#0123456789`}]+");
             sc.useDelimiter("'*[^\\p{IsAlphabetic}']+'*");
             String words;
 

@@ -6,6 +6,17 @@ import java.util.*;
 
 public class Parseo {
 
+
+    /**
+     * Este método recibe una carpeta la cual es recorrida y se obtienen de cada documento su Id, Título y url
+     * Luego carga estos documentos en la Base de Datos
+     * @param em el Entity Manager que ha sido abierto anteriormente.
+     * @param carpeta carpeta que es recorrida recursivamente para obtener sus documentos
+     * @param tablaHash tabla que contiene el Vocabulario
+     * @param huboCargaAnterior booleano que define si ya hay documentos cargados en la BD o no.
+     * @return la cantidad de documentos cargados.
+     * @throws IOException
+     */
     public int ObtenerDatosDocumento (EntityManager em, File carpeta, Hashtable<String,VocabularioEntity> tablaHash, Boolean huboCargaAnterior) throws IOException {
 
         int idDocumento = Persistencia.obtenerMaxIdDoc(em, huboCargaAnterior);
@@ -42,6 +53,12 @@ public class Parseo {
         return docCargados;
     }
 
+
+    /**
+     *
+     * @param file
+     * @param tablaVocabulario
+     */
     public void parseador(File file,Hashtable<String,VocabularioEntity> tablaVocabulario)
     {
         //Hashtable<String,VocabularioEntity> tablaHash = new Hashtable<String, VocabularioEntity>();
