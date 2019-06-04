@@ -8,6 +8,11 @@ import java.util.*;
 
 public class Persistencia {
 
+
+    /**
+     * Este método crea el EntityManagerFactory y el EntityManager.
+     * @return el EntityManager creado.
+     */
     public EntityManager crearPersistencia()
     {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("DocumentosPU");
@@ -15,16 +20,31 @@ public class Persistencia {
         return em;
     }
 
+
+    /**
+     * Este método inicia una transacción.
+     * @param em el EntityManager anteriormente creado.
+     */
     public void abrirPersistencia(EntityManager em)
     {
         em.getTransaction().begin();
     }
 
+    /**
+     * Este método cierra el EntityManager.
+     * @param em el EntityManager anteriormente creado.
+     */
     public void cerrarPersistencia(EntityManager em)
     {
         em.close();
     }
 
+
+    /**
+     * Este método recibe una tablaHash con el Vocabulario cargado y lo persiste en la Base de Datos.
+     * @param em el EntityManager anteriormente creado.
+     * @param tablaHash tablaHash que contiene objetos VocabularioEntity.
+     */
     public void persistirVocabulario(EntityManager em, Hashtable<String, VocabularioEntity> tablaHash)
     {
         abrirPersistencia(em);
@@ -39,6 +59,14 @@ public class Persistencia {
         System.out.println("Persistido el vocabulario.");
     }
 
+
+    /**
+     * Este método recibe una carpeta con documentos y arma la lista de posteo la cual la persiste en la Base de Datos
+     * @param em el EntityManager anteriormente creado.
+     * @param carpeta carpeta que es recorrida recursivamente para obtener sus documentos
+     * @param docCargados cantidad de documentos cargados con anterioridad.
+     * @throws IOException
+     */
     public void persistirPosteo (EntityManager em, File carpeta,int docCargados) throws IOException {
 
         int idDocumento = obtenerMaxIdDoc(em,true) - docCargados;
@@ -74,6 +102,13 @@ public class Persistencia {
 
     }
 
+
+    /**
+     * Este método obtiene el número de id del último documento cargado en la Base de Datos.
+     * @param em el EntityManager creado anteriormente.
+     * @param flag es True si la Base de Datos ya contiene Documentos, False en el caso contrario.
+     * @return el número de id del último documento cargado en la Base de Datos.
+     */
     static int obtenerMaxIdDoc(EntityManager em, Boolean flag) {
         int idDocumento = 0;
 
@@ -88,6 +123,13 @@ public class Persistencia {
         return idDocumento;
     }
 
+
+    /**
+     * Este método recupera los Vocabularios cargados en la Base de Datos y los coloca en una HashTable para aumentar
+     * la velocidad de las consultas.
+     * @param em el EntityManager creado anteriormente.
+     * @return la HashTable con el Vocabulario.
+     */
     public Hashtable<String,VocabularioEntity>  cargarTabla(EntityManager em) {
 
         Hashtable<String,VocabularioEntity> hashTable = new Hashtable<>();
@@ -103,6 +145,15 @@ public class Persistencia {
         return hashTable;
     }
 
+
+    /**
+     * Este método recupera los Vocabularios cargados en un archivo binario y los coloca en una HashTable para aumentar
+     * la velocidad de las consultas.
+     * @param nombreArchivo archivo a recuperar.
+     * @return la HashTable con el Vocabulario.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public Hashtable<String,VocabularioEntity>  leerTabla (String nombreArchivo) throws IOException, ClassNotFoundException {
         try{
             ObjectInputStream leerArchivo =  new ObjectInputStream(new FileInputStream(nombreArchivo));
@@ -115,4 +166,14 @@ public class Persistencia {
         }
     }
 
+    public void  serializarTabla (Hashtable hashtable) throws IOException {
+        try{
+            ObjectOutputStream grabarArchivo = new ObjectOutputStream(new FileOutputStream("tabla.dat"));
+            grabarArchivo.writeObject(hashtable);
+            grabarArchivo.close();
+        }
+        catch (Exception ex){
+            throw ex;
+        }
+    }
 }
