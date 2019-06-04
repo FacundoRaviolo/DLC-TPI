@@ -41,6 +41,7 @@ public class Main {
                     persistencia.persistirVocabulario(em,tablaHash);
                     persistencia.serializarTabla(tablaHash);
                     persistencia.persistirPosteo(em,carpeta,docCargados);
+                    break;
                 case 2:
                     persistencia.abrirPersistencia(em);
                     Hashtable<String, VocabularioEntity> hashtable = persistencia.cargarTabla(em);
@@ -52,6 +53,7 @@ public class Main {
                     persistencia.persistirVocabulario(em,hashtable);
                     persistencia.serializarTabla(hashtable);
                     persistencia.persistirPosteo(em,carpetaAdd,documCargados);
+                    break;
                 case 3:
                     persistencia.abrirPersistencia(em);
                     final Hashtable<String,VocabularioEntity> vocabulario = persistencia.leerTabla("tabla.dat");
@@ -170,6 +172,7 @@ public class Main {
                     interfaz.setLayout(null);
                     interfaz.setVisible(true);
                     interfaz.setLocationRelativeTo(null);
+                    break;
 
             }
 
