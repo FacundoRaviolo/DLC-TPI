@@ -166,6 +166,11 @@ public class Persistencia {
         }
     }
 
+    /**
+     * Este método graba la tabla Vocabulario en un archivo binario llamado tabla.dat.
+     * @param hashtable la hashtable con los objetos de Vocabulario.
+     * @throws IOException
+     */
     public void  serializarTabla (Hashtable hashtable) throws IOException {
         try{
             ObjectOutputStream grabarArchivo = new ObjectOutputStream(new FileOutputStream("tabla.dat"));

@@ -55,14 +55,14 @@ public class Parseo {
 
 
     /**
-     *
-     *
-     * @param file
-     * @param tablaVocabulario
+     * Este método recibe un documento y la hashtable de Vocabulario. Suma las cantidades de veces que aparecen las palabras.
+     * Para cada palabra del documento revisa si está en la hashtable. Si está, actualiza sus valores. Si no está,
+     * la agrega y la inicializa en 1 y con la cantidad máxima de veces de ese documento.
+     * @param file un documento de texto.
+     * @param tablaVocabulario la hashtable ya creada.
      */
     public void parseador(File file,Hashtable<String,VocabularioEntity> tablaVocabulario)
     {
-        //Hashtable<String,VocabularioEntity> tablaHash = new Hashtable<String, VocabularioEntity>();
         HashMap<String,Integer> listaPosteo = new HashMap<>();
         LectorPalabras lector = new LectorPalabras();
         lector.readFile(file,listaPosteo);
