@@ -156,7 +156,9 @@ public class Persistencia {
      */
     public Hashtable<String,VocabularioEntity>  leerTabla (String nombreArchivo) throws IOException, ClassNotFoundException {
         try{
-            ObjectInputStream leerArchivo =  new ObjectInputStream(new FileInputStream(nombreArchivo));
+            FileInputStream fileInputStream = new FileInputStream(nombreArchivo);
+            BufferedInputStream bf = new BufferedInputStream(fileInputStream);
+            ObjectInputStream leerArchivo =  new ObjectInputStream(bf);
             Hashtable<String,VocabularioEntity> hashTable = (Hashtable<String,VocabularioEntity>)leerArchivo.readObject();
             leerArchivo.close();
             return hashTable;
@@ -173,7 +175,9 @@ public class Persistencia {
      */
     public void  serializarTabla (Hashtable hashtable) throws IOException {
         try{
-            ObjectOutputStream grabarArchivo = new ObjectOutputStream(new FileOutputStream("tabla.dat"));
+            FileOutputStream fileOutputStream = new FileOutputStream("tabla.dat");
+            BufferedOutputStream bf = new BufferedOutputStream(fileOutputStream);
+            ObjectOutputStream grabarArchivo = new ObjectOutputStream(bf);
             grabarArchivo.writeObject(hashtable);
             grabarArchivo.close();
         }

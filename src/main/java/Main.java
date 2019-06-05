@@ -129,32 +129,8 @@ public class Main {
                                 altura = altura + 70+20;
 
                             }
-                            if (consulta.equals("boca juniors"))
-                            {
-                                String soundName = "Trompetas.wav";
-                                AudioInputStream audioInputStream = null;
-                                try {
-                                    audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
-                                } catch (UnsupportedAudioFileException ex) {
-                                    ex.printStackTrace();
-                                } catch (IOException ex) {
-                                    ex.printStackTrace();
-                                }
-                                Clip clip = null;
-                                try {
-                                    clip = AudioSystem.getClip();
-                                } catch (LineUnavailableException ex) {
-                                    ex.printStackTrace();
-                                }
-                                try {
-                                    clip.open(audioInputStream);
-                                } catch (LineUnavailableException ex) {
-                                    ex.printStackTrace();
-                                } catch (IOException ex) {
-                                    ex.printStackTrace();
-                                }
-                                clip.start();
-                            }
+
+                            buscador.easterEgg(consulta);
                         }
                     });
 

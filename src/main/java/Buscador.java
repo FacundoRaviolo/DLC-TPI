@@ -4,6 +4,9 @@ import entidades.VocabularioEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.sound.sampled.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class Buscador implements Comparator{
@@ -181,5 +184,39 @@ public class Buscador implements Comparator{
         VocabularioEntity v1 =(VocabularioEntity)o1;
         VocabularioEntity v2 =(VocabularioEntity)o2;
         return new Integer(v1.getCantDoc()).compareTo(new Integer(v2.getCantDoc()));
+    }
+
+    /**
+     * Este método invoca un efecto sonoro sorpresa al introducir una consulta clave.
+     * @param consulta la consulta realizada en la búsqueda.
+     */
+    public void easterEgg(String consulta)
+    {
+        if (consulta.equals("boca juniors"))
+        {
+            String soundName = "Trompetas.wav";
+            AudioInputStream audioInputStream = null;
+            try {
+                audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
+            } catch (UnsupportedAudioFileException ex) {
+                ex.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            Clip clip = null;
+            try {
+                clip = AudioSystem.getClip();
+            } catch (LineUnavailableException ex) {
+                ex.printStackTrace();
+            }
+            try {
+                clip.open(audioInputStream);
+            } catch (LineUnavailableException ex) {
+                ex.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            clip.start();
+        }
     }
 }
